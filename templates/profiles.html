@@ -1,0 +1,78 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class='jumbotron'>
+            <center>
+                <h3>
+                    <img src={{ url_for('static',filename='logo.jpeg' ) }}><br><br> CHALLENGE - SCANNNED APPLICATIONS
+                </h3>
+            </center>
+<div class='row' id='apps-profiler'>
+    
+</div>
+        </div>
+        <br>
+       
+    </div>
+    </div>
+    </p>
+    </div>
+</body>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+        function loadAppsDashboard() {
+            $.ajax({
+                url: "api/data", method: 'GET', dataType: 'json', success: function (result) {
+                    var allUserApps = result.all, criticalApps = result.critical,
+                        nonCriticalApps = result.noncritical;
+                    var row = "";
+                    for (const userImei in allUserApps) {
+                        let userInfo = allUserApps[userImei].profile,
+                            criticalApps = allUserApps[userImei].apps_categories.critical,
+                            intermediatecriticalApps = allUserApps[userImei].apps_categories.intermediate,
+                            nonCriticalApps = allUserApps[userImei].apps_categories.noncritical;
+                        var list = "";
+                        var tr = "<tr><td>" + userInfo.subscriber_id + "</td><td>" + userInfo.operator_1 + "</td><td>" + userInfo.iccid_1 + "</td><td>" + userInfo.operator_2 + "</td><td>" + userInfo.iccid_2 + "</td><td>" + userInfo.imei_1 + "</td><td>" + userInfo.imei_2 + "</td></tr>";
+                        $("#userInfo").append(tr);
+                        row += "<div class='table-responsive col-lg-12'>"
+                            + "<table class='table table-bordered jumbotron' style='border: 2px solid;border-color: #0D2A63;'>"
+                            + "<tr>"
+                            + "<td colspan='2' id=''><center><button  class='btn' style='background-color:#0D2A63;color:white'>USER PROFILE <b>"+userInfo.subscriber_id+"</b></button></center></td>"
+                            + "</tr>"
+                            + "<tr>"
+                            + "<td rowspan='4'><b> ICCID 1:</b> "+userInfo.iccid_1+"<br><br> <b>OPERATOR 1:</b> "+ userInfo.operator_1 +"<br><br><b> ICCID 2: </b> " + userInfo.iccid_2 +"<br><br> <b>OPERATOR 2:</b> "+ userInfo.operator_2 +"<br><br><b> IMEI 1:</b> "+userInfo.imei_1+"<br><br> <b>IMEI 2:</b> "+ userInfo.imei_2 +"</td>"
+                            + "</tr>"
+                            + "<tr>"
+                            + "<td class='alert alert-danger'><center>CRITICAL APPS<br>"+criticalApps.length+"</center></td>"
+                            + "</tr>"
+                            + "<tr>"
+                            + "<td class='alert alert-warning'><center>INTERMEDIATE APPS<br>"+intermediatecriticalApps.length+"</center></td>"
+                            + "</tr>"
+                            + "<tr>"
+                            + "<td class='alert alert-success'><center>NON CRITICAL APPS<br>"+ nonCriticalApps.length +"</center></td>"
+                            + "</tr>"
+                            + "</div>";
+                    }
+                    $("#apps-profiler").html(row);
+                }
+            });
+        }
+        loadAppsDashboard();
+    });
+</script>
+
+</html>
