@@ -61,7 +61,7 @@
         </li>
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link"  data-toggle="modal" data-target="#logoutModal">
+            <a class="nav-link" data-toggle="modal" data-target="#logoutModal">
                 <i class="fas fa-fw fa-angle-double-left"></i>
                 <span>Logout</span></a>
         </li>
@@ -353,10 +353,12 @@
     function setReportContent(level, arr_obj) {
         var data = "";
         const key_arr = ["critical", "high", "medium"];
+        const colors = ["red", "#FF7377", "#E0C35A"];
+        const colors_obj = {"critical": "red", "high": "#FF7377", "medium": "#E0C35A"};
         var data_counter = 1;
         if (level != "all") {
             for (var i = 0; i < arr_obj.length; i++) {
-                data += `<tr>
+                data += `<tr style="background-color: ${colors_obj[level]};color:white;font-weight: bold">
                        <td>${i + 1}</td>
                        <td>${arr_obj[i].app_name}</td>
                        <td>${arr_obj[i].package}</td>
@@ -365,11 +367,11 @@
                                         </tr>`;
             }
         } else {
-                console.log(`Index of keys`);
+            console.log(`Index of keys`);
             for (var x = 0; x < key_arr.length; x++) {
                 console.log(`${key_arr[x]} ${arr_obj[key_arr[x]].length}`)
                 for (var i = 0; i < arr_obj[key_arr[x]].length; i++) {
-                    data += `<tr>
+                    data += `<tr style="background: ${colors[x]};color:white;">
                         <td>${data_counter++}</td>
                         <td>${arr_obj[key_arr[x]][i].app_name}</td>
                        <td>${arr_obj[key_arr[x]][i].package}</td>
@@ -432,13 +434,12 @@
 
         pdf.html(document.getElementById('dataTable'), {
             callback: function (pdf) {
-                pdf.save('test.pdf');
+                pdf.save('Report.pdf');
                 $("#filtering_criteria").hide()
                 $("#dataTable").removeAttr('style');
             }
         });
     }
-
 
 
     $("#btnFilter").click(function () {

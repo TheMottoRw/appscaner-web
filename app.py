@@ -1,5 +1,4 @@
 from flask import render_template, request, redirect, jsonify
-from datetime import datetime
 from config import app
 from controllers import VulnerabilityScanner
 import json
@@ -10,14 +9,6 @@ apps_obj = VulnerabilityScanner.Apps()
 @app.route("/")
 def hello():
     return redirect("dashboard")
-    # return "Welcome to scanner app "+str(request.headers['Host'])
-    # return render_template("login.html")
-
-
-@app.route("/save")
-def mysqlconnection():
-    return "Version " + str(VulnerabilityScanner.mysqlconnect())
-    # return render_template("login.html")
 
 
 @app.route("/requests", methods=['POST'])
@@ -33,8 +24,9 @@ def requestsData():
 
     print(jsonData['user']['subscriber'])
     return jsonify(jsonData['user'])
-    # return render_template("login.html")
 
+
+# API Endpoints
 
 @app.route("/api/data", methods=['GET'])
 def retrieveApps():
@@ -58,11 +50,6 @@ def filter_report():
         apps_obj.filter_report(request.args.get("levels"), request.args.get("start"), request.args.get("end")))
 
 
-@app.route("/api/export", methods=['GET'])
-def export():
-    return apps_obj.export_pdf()
-
-
 # views
 
 @app.route("/graphs", methods=['GET'])
@@ -84,6 +71,7 @@ def report():
 def login():
     return render_template("login.html")
 
+
 @app.route("/dashboard", methods=['GET'])
 def dashboard_graphed():
     return render_template("dashboard_graphed.html")
@@ -95,4 +83,4 @@ def profiles():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=9000)

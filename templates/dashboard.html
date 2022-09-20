@@ -131,10 +131,11 @@
         }});
       }
         function loadAppsDashboard(){
+          var totalApps = 0;
            $.ajax({
             url: "api/data", method: 'GET', dataType: 'json', success: function (result) {
-              var allUserApps = result.all,criticalApps = result.critical,
-                nonCriticalApps = result.noncritical;
+              var allUserApps = result.all,criticalApps = result.categorized.critical,
+                nonCriticalApps = result.categorized.noncritical,intermediate=result.categorized.intermediate;
               // var graphData = [criticalApps.length + nonCriticalApps.length, nonCriticalApps.length, criticalApps.length];
               // pieChart(graphData);
 
@@ -150,6 +151,7 @@
                     criticalApps = allUserApps[userImei].apps_categories.critical,
                   intermediatecriticalApps = allUserApps[userImei].apps_categories.intermediate,
                   nonCriticalApps = allUserApps[userImei].apps_categories.noncritical;
+                totalApps+= (criticalApps.length+intermediatecriticalApps.length+nonCriticalApps.length);
               var list = "";
               var tr = "<tr><td>" + userInfo.subscriber_id + "</td><td>" + userInfo.operator_1 + "</td><td>" + userInfo.iccid_1 + "</td><td>" + userInfo.operator_2 + "</td><td>" + userInfo.iccid_2 + "</td><td>" + userInfo.imei_1 + "</td><td>" + userInfo.imei_2 + "</td></tr>";
                 $("#userInfo").append(tr);
@@ -237,6 +239,8 @@
               }
               $("#noncriticalApps").html(nonList);
             }
+
+              console.log(`C:${totalApps}`);
 
              }
           });
